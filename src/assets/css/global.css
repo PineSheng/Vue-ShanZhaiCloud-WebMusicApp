@@ -1,0 +1,74 @@
+/* 
+公共样式
+*/
+
+
+/* 播放进度条和音量样式 */
+.el-slider__button{
+  width: 10px;
+  height: 10px;
+  border: 2px solid #c62f2f;
+}
+
+.el-slider__bar{
+  background-color: #c62f2f;
+}
+
+
+/* 发现音乐导航栏样式 */
+.el-menu.el-menu--horizontal {
+  border-bottom: none;
+}
+
+/* 禁用页面滚动条 */
+body {
+	overflow-y:hidden;
+}
+
+/* 输入框 */
+.el-input__inner{
+  -webkit-appearance: none;
+  background-color: #fff;
+  background-image: none;
+  border-radius: 4px;
+  border: 1px solid #dcdfe6;
+  box-sizing: border-box;
+  color: #606266;
+  display: inline-block;
+  font-size: inherit;
+  outline: 0;
+  padding: 0 15px;
+  transition: border-color .2s cubic-bezier(.645,.045,.355,1);
+  width: 225px;
+  height: 23px;
+  border-radius: 12px;
+  opacity: 0.5
+}
+
+/* 分页样式 */
+/* .el-pager li.active{
+  color: #fff;
+  background-color: #c62f2f;
+} */
+
+
+
+
+.el-pagination.is-background .el-pager li:not(.disabled).active {
+  background-color: #ec4141;
+  color: #FFF;
+}
+.el-pagination.is-background .el-pager li.active {
+  color: #fff;
+  cursor: default;
+}
+.el-pagination.is-background .el-pager li:hover {
+  color: #ec4141;
+}
+.el-pagination.is-background .el-pager li:not(.disabled):hover {
+  color: #ec4141;
+}
+.el-pagination.is-background .el-pager li:not(.disabled).active:hover {
+  background-color: #ec4141;
+  color: #FFF;
+}

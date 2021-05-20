@@ -3,18 +3,24 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "serve": "vue-cli-service serve",
+    "serve": "vue-cli-service serve --open",
     "build": "vue-cli-service build"
   },
   "dependencies": {
+    "axios": "^0.21.1",
     "core-js": "^2.6.5",
+    "element-ui": "^2.15.1",
     "vue": "^2.6.10",
+    "vue-axios": "^3.2.4",
     "vue-router": "^3.0.3",
     "vuex": "^3.0.1"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "^3.12.0",
     "@vue/cli-service": "^3.12.0",
+    "node-sass": "^4.14.1",
+    "sass-loader": "^9.0.0",
+    "style-loader": "^2.0.0",
     "vue-template-compiler": "^2.6.10"
   }
 }
