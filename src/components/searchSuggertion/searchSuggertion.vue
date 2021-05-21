@@ -4,16 +4,16 @@
     <!-- 搜索历史部分 -->
     <div class="search-history">
       <!-- 搜索历史标题 -->
-      <div class="search-history-title" v-show="historyData.length > 0">
+      <div class="search-history-title" v-show="searchHistoryData.length > 0">
         <span style="font-size:18px;opacity: 0.6;">搜索历史</span>
-        <img src="../../assets/img/trash.svg" alt="">
+        <img style="cursor: pointer;" src="../../assets/img/trash.svg" @click="empSearchHistoryData()">
       </div>
     </div>
     <!-- 搜索历史数据 -->
-    <div class="search-history-data" v-show="historyData.length > 0">
-      <div class="history-data-box" v-for="(item,index) in historyData" :key="index">
+    <div class="search-history-data" v-show="searchHistoryData.length > 0">
+      <div class="history-data-box" v-for="(item,index) in searchHistoryData" :key="index">
         <span>{{item}}</span>
-        <i class="el-icon-close" @click="deleteHistory(index)"></i>
+        <i style="margin-left:5px" class="el-icon-close" @click="delSearchHistoryData(index)"></i>
       </div>
     </div>
     <!-- 热搜榜 -->
@@ -41,23 +41,33 @@
 </template>
 
 <script>
+import { mapGetters, mapMutations, mapActions } from "vuex"
 export default {
   name:'searchSuggertion',
   data() {
     return {
-      historyData:['111','222','333','444'],
       hotSearchData:[],
       searchOver:''
     }
+  },
+  computed:{
+    ...mapGetters([
+      //搜索历史记录
+      'searchHistoryData',
+    ]),  
   },
   created(){
     this.getHotSearchData()
   },
   methods:{
-    //删除搜索历史数据
-    deleteHistory(index){
-      this.historyData.splice(index,1)
-    },
+    ...mapMutations([
+      //删除搜索历史记录
+      'delSearchHistoryData',
+      //清空搜索历史记录
+      'empSearchHistoryData',
+      //添加搜索历史记录
+      'addSearchHistoryData'
+    ]),    
     //获取热搜榜数据
     getHotSearchData(){
       this.$http.get('search/hot/detail')
@@ -69,9 +79,16 @@ export default {
         this.$message.error('热搜榜数据请求失败')
       })
     },
-    //点击搜索建议后跳转
+    //点击搜索建议后跳转-添加搜索历史记录
     searchJump(searchWord){
       this.$emit('clickSearchJump',false)
+      //判断搜索历史记录是否和添加的数据重复
+      let whether = this.searchHistoryData.filter((i) => {
+        return i == searchWord
+      })
+      if(whether.length == 0){
+        this.addSearchHistoryData(searchWord)
+      }
       if(this.$route.query.searchWord != searchWord){
         this.$router.push({
           path: '/searchPage/searchBySong',

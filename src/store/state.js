@@ -11,8 +11,11 @@ const state = {
   //音乐播放列表
   palySongList:[],
 
-  //历史记录列表
-  songHistoryList:[]
+  //历史播放记录列表
+  songHistoryList:[],
+
+  //搜索历史记录
+  searchHistoryData:[]
 }
 
 export default state

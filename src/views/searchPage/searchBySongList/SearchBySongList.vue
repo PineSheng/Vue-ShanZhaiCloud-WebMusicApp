@@ -74,7 +74,7 @@ export default {
     songSheetDetails(item){
       //console.log(item)
       this.$router.push({
-        path: '/SongSheetDetails',
+        path: '/songSheetDetails',
         query:{
           id:item.id
         }

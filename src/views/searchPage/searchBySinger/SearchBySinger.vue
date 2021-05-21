@@ -69,6 +69,7 @@ export default {
         this.$message.error('歌手信息请求失败,请重试')
       })
     },
+    //查看歌手详情
     artistPageJump(item){
       //console.log(item)
       this.$router.push({

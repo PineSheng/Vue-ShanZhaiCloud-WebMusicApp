@@ -26,6 +26,7 @@
 </template>
 
 <script>
+import { mapGetters, mapMutations, mapActions } from "vuex"
 import SearchSuggertion from '../searchSuggertion/searchSuggertion'
 import SearchInputSuggertion from '../searchInputSuggertion/SearchInputSuggertion'
 export default {
@@ -43,19 +44,27 @@ export default {
     SearchSuggertion,
     SearchInputSuggertion
   },
+  computed:{
+    ...mapGetters([
+      //搜索历史记录
+      'searchHistoryData',
+    ]),  
+  },
   methods:{
-    login(){
-      let data = {
-        phone:'17607474820',
-        password:'qq648166871'
-      }
-      this.$http.post('login/cellphone',data).then(res =>{
-        console.log(res)
-      })
-    },
-    //回车搜索
+    ...mapMutations([
+      //添加搜索历史记录
+      'addSearchHistoryData'
+    ]),
+    //回车搜索-添加搜索历史记录
     search(){
       let searchWord = this.searchContent
+      //判断搜索历史记录是否和添加的数据重复
+      let whether = this.searchHistoryData.filter((i) => {
+        return i == searchWord
+      })
+      if(whether.length == 0){
+        this.addSearchHistoryData(searchWord)
+      }
       if(this.$route.query.searchWord != searchWord && this.searchContent != ''){
         this.$router.push({
           path: '/searchPage/searchBySong',

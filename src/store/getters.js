@@ -12,3 +12,6 @@ export const palySongList = state => state.palySongList
 
 //历史记录列表
 export const songHistoryList = state => state.songHistoryList
+
+//搜索历史记录
+export const searchHistoryData = state => state.searchHistoryData

@@ -3,7 +3,7 @@
   <div>
     <el-divider content-position="left"><h2>推荐歌单</h2></el-divider>
     <div class="recommen-list-content">
-      <div class="recommen-list-box" v-for="(item,index) in recommenListData" :key="index">
+      <div class="recommen-list-box" v-for="(item,index) in recommenListData" :key="index" @click="seeDetails(item)">
         <div class="recommen-list-img">
           <img :src="item.picUrl" alt="">
           <div class="play-count">
@@ -60,6 +60,15 @@ export default {
         this.$message.error('推荐歌单请求失败')
       })
     },
+    //查看歌单详情
+    seeDetails(item){
+      this.$router.push({
+        path: '/songSheetDetails',
+        query:{
+          id:item.id
+        }
+      })
+    }
   }
 }
 </script>
