@@ -1,4 +1,4 @@
-# cloudmusic
+# ShanZhaiMusic
 
 ## Project setup
 ```
