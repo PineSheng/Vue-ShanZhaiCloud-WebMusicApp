@@ -37,15 +37,12 @@ const mutations = {
   delectMusicList(state,index){
     state.palySongList.splice(index,1)
   },
-
-<<<<<<< HEAD
+  
   //清空播放列表音乐
   delMusicList(state){
     state.palySongList = []
   },
 
-=======
->>>>>>> 821ab76b6b760df05a00816689d96a033ef292d7
   //添加音乐到历史播放列表
   addHistoryList(state,songDetails){
     //判断列表中有没有该音乐
@@ -63,7 +60,6 @@ const mutations = {
       state.songHistoryList.unshift(songDetails)
     }    
   },
-<<<<<<< HEAD
 
   //历史播放列表删除音乐
   delectHistoryList(state,index){
@@ -80,14 +76,12 @@ const mutations = {
     state.searchHistoryData.push(historyData)
   },
 
-=======
 
   //添加搜索历史记录
   addSearchHistoryData(state,historyData){
     state.searchHistoryData.push(historyData)
   },
-
->>>>>>> 821ab76b6b760df05a00816689d96a033ef292d7
+  
   //删除搜索历史记录
   delSearchHistoryData(state,index){
     state.searchHistoryData.splice(index,1)

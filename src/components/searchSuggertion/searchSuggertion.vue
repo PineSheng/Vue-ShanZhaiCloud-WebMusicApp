@@ -11,11 +11,7 @@
     </div>
     <!-- 搜索历史数据 -->
     <div class="search-history-data" v-show="searchHistoryData.length > 0">
-<<<<<<< HEAD
       <div class="history-data-box" v-for="(item,index) in searchHistoryData" :key="index" @click="searchJump(item)">
-=======
-      <div class="history-data-box" v-for="(item,index) in searchHistoryData" :key="index">
->>>>>>> 821ab76b6b760df05a00816689d96a033ef292d7
         <span>{{item}}</span>
         <i style="margin-left:5px" class="el-icon-close" @click="delSearchHistoryData(index)"></i>
       </div>
