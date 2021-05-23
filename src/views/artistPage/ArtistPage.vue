@@ -1,11 +1,13 @@
 <template>
   <div class="artist-page" style="height:calc(100% - 50px)">
     <div class="detail">
-      <el-image
-        :src="artistData.artist.cover"
-        fit="fill"
-        style="height: 100%;width: 300px;border-radius: 10px;"
-      ></el-image>
+      <div class="artist-img">
+        <el-image
+          :src="artistData.artist.cover"
+          fit="fill"
+          style="height: 100%;border-radius: 10px;"
+        ></el-image>
+      </div>
       <div class="artist-describe">
         <h2 style="margin-left:30px">{{artistData.artist.name}}</h2>
         <div class="is-btn-box">
@@ -71,6 +73,15 @@ export default {
       loading:false
     }
   },
+  watch: {
+   //监听路由参数
+   $route(){
+    this.artistId = this.$route.query.artistId
+   },
+   artistId() {
+     this.getArtistData()
+   },
+  },
   components:{
     Album,
     Mv,
@@ -111,6 +122,10 @@ h2{margin: 0px; padding: 0px;}
   width: 100%;
   padding:20px;
   overflow-y: auto;
+}
+.artist-img{
+  width: 30vh;
+  height: 30vh;
 }
 .detail{
   display: flex;

@@ -43,7 +43,7 @@
             {{item.ar[0].name}}
           </div>
           <div class="song-time">
-            <img src="../../assets/img/close.svg" alt="" @click="songListDelect(index)">
+            <img src="../../assets/img/close.svg" alt="" @click.stop="songListDelect(index)">
             {{$seconds(item.dt / 1000)}}
           </div>
         </div>
@@ -66,7 +66,7 @@
             <span>{{item.ar[0].name}}</span>
           </div>
           <div class="song-time">
-            <img src="../../assets/img/close.svg" alt="" @click="historyListDelete(index)">
+            <img src="../../assets/img/close.svg" alt="" @click.stop="delectHistoryList(index)">
             {{$seconds(item.dt / 1000)}}
           </div>
         </div>
@@ -111,7 +111,13 @@ export default {
       //加入要播放的歌曲id
       'pushId',
       //播放列表删除音乐
-      'delectMusicList'
+      'delectMusicList',
+      //历史播放列表删除音乐
+      'delectHistoryList',
+      //清空播放列表音乐
+      'delMusicList',
+      //清空历史播放列表
+      'delHistoryAll'
     ]),
     //播放列表切换
     playListClick(){
@@ -126,10 +132,6 @@ export default {
       this.historyListActive = true;
       this.historyColor = 'background:#bbb;color:#fff';
       this.playListColor = 'background:#fff';
-    },
-    //历史记录删除数据
-    historyListDelete(index){
-      this.songHistoryList.splice(index,1)
     },
     //列表双击事件
     listDblclick(index){
@@ -165,8 +167,7 @@ export default {
     },
     //清空列表
     delectAll(){
-      //this.playListActive ? this.songList = [] : this.songHistoryList = []
-      console.log(this.palySongList)
+      this.playListActive ? this.delMusicList() : this.delHistoryAll()
     },
   }
 }

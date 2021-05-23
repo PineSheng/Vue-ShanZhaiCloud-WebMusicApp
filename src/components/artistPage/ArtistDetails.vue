@@ -27,6 +27,15 @@ export default {
   created(){
     this.getDetailsText()
   },
+  watch: {
+   //监听路由参数
+   $route(){
+    this.artistId = this.$route.query.artistId
+   },
+   artistId() {
+     this.getDetailsText()
+   },
+  },
   methods: {
     //获取歌手详情文本
     getDetailsText(){

@@ -4,18 +4,22 @@ const mutations = {
     state.playSongId = ''
     state.playSongId = id
   },
+  
   //播放音乐
   startPlayMusic(state){
     state.playState = true
   },
+
   //暂停音乐
   suspendMusic(state){
     state.playState = false
   },
+
   //切换播放模式
   modeSwitching(state,modeName){
     state.playMode = modeName
   },
+
   //添加音乐到播放列表
   addMusicList(state,songDetails){
     //判断列表中有没有该音乐
@@ -28,11 +32,18 @@ const mutations = {
       state.palySongList.push(songDetails)
     }
   },
+
   //播放列表删除音乐
   delectMusicList(state,index){
     state.palySongList.splice(index,1)
   },
-  //添加音乐到历史记录列表
+
+  //清空播放列表音乐
+  delMusicList(state){
+    state.palySongList = []
+  },
+
+  //添加音乐到历史播放列表
   addHistoryList(state,songDetails){
     //判断列表中有没有该音乐
     let result = state.songHistoryList.some(item => {
@@ -48,8 +59,32 @@ const mutations = {
     }else if(!result){
       state.songHistoryList.unshift(songDetails)
     }    
-  }
+  },
 
+  //历史播放列表删除音乐
+  delectHistoryList(state,index){
+   state.songHistoryList.splice(index,1)
+  },
+
+  //清空历史播放列表
+  delHistoryAll(state){
+    state.songHistoryList = []
+  },
+
+  //添加搜索历史记录
+  addSearchHistoryData(state,historyData){
+    state.searchHistoryData.push(historyData)
+  },
+
+  //删除搜索历史记录
+  delSearchHistoryData(state,index){
+    state.searchHistoryData.splice(index,1)
+  },
+
+  //清空搜索历史记录
+  empSearchHistoryData(state){
+    state.searchHistoryData = []
+  }
 }
 
 export default mutations

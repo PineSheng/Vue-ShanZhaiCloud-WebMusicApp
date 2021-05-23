@@ -1,6 +1,6 @@
 <template>
   <div class="artist-resemble" v-loading="loading" element-loading-text="正在加载">
-    <div style="width:18%;" v-for="(item,index) in SimilarSingerData" :key="index">
+    <div style="width:18%;margin-right: 2%;" v-for="(item,index) in SimilarSingerData" :key="index" @click="artistPageJump(item)">
       <el-image
         :src="item.picUrl"
         fit="fill"
@@ -29,6 +29,15 @@ export default {
   created(){
     this.getSimilarSinger()
   },
+  watch: {
+   //监听路由参数
+   $route(){
+    this.artistId = this.$route.query.artistId
+   },
+   artistId() {
+     this.getSimilarSinger()
+   },
+  },
   methods: {
     getSimilarSinger(){
       this.loading = true
@@ -43,7 +52,15 @@ export default {
       })
       .catch(err => {
         console.log(err)
-        this.$message.error('歌手详情文本请求失败,请重试')
+        this.$message.error('歌手详情请求失败,请重试')
+      })
+    },
+    artistPageJump(item){
+      //console.log(item)
+      this.$router.push({
+        query:{
+          artistId:item.id
+        }
       })
     }
   },
@@ -56,7 +73,6 @@ export default {
   margin-top: 20px;
   display: flex;
   flex-wrap: wrap;
-  justify-content: space-around;
   overflow-y: auto;
 }
 .artist-name{

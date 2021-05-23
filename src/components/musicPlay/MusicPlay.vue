@@ -163,9 +163,9 @@ export default {
   computed:{
     ...mapGetters([
       //播放状态
-      "playState",
+      'playState',
       //要播放的音乐id
-      "playSongId",
+      'playSongId',
       //播放列表
       'palySongList',
       //历史记录列表

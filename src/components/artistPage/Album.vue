@@ -58,6 +58,15 @@ export default {
   created(){
     this.getAlbumData()
   },
+  watch: {
+   //监听路由参数
+   $route(){
+    this.artistId = this.$route.query.artistId
+   },
+   artistId() {
+     this.getAlbumData()
+   },
+  },
   methods: {
     //获取专辑信息
     getAlbumData(){
@@ -105,10 +114,16 @@ export default {
 .album-box{
   display: flex;
   flex-wrap: wrap;
-  justify-content: space-around;
+  justify-content: space-between;
+}
+.album-box:after{
+  content: "";
+  width: 22%;
+  height: 0px;
+  visibility: hidden;
 }
 .album{
-  width: 21%;
+  width: 22%;
   cursor: pointer;
   margin-bottom: 20px;
   position: relative;

@@ -39,8 +39,7 @@ export default {
 
 <style scoped>
 .find-music{
-  width: 100%;
-  padding: 20px;
+  padding:20px;
 }
 
 .navigation-bar{

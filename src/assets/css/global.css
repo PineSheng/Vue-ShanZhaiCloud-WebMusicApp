@@ -46,14 +46,6 @@ body {
 }
 
 /* 分页样式 */
-/* .el-pager li.active{
-  color: #fff;
-  background-color: #c62f2f;
-} */
-
-
-
-
 .el-pagination.is-background .el-pager li:not(.disabled).active {
   background-color: #ec4141;
   color: #FFF;

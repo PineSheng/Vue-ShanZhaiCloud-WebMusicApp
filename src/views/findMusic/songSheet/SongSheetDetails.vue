@@ -1,5 +1,5 @@
 <template>
-  <div class="song-sheet-details">
+  <div class="song-sheet-details" style="height:calc(100% - 20px);" v-loading="loading" element-loading-text="正在加载">
     <div class="introduce">
       <div class="song-sheet-img">
         <el-image
@@ -26,7 +26,7 @@
         </div>
         <!-- 按钮 -->
         <div class="song-sheet-btn">
-          <div class="play-all">
+          <div class="play-all" @click="playAll">
             <img src="@/assets/img/play-white.svg" alt="">
             <span>播放全部</span>
           </div>
@@ -65,14 +65,15 @@
       active-text-color="#ec4141"
       >
         <el-menu-item index="1">歌曲列表</el-menu-item>
-        <el-menu-item index="2">评论</el-menu-item>
+        <el-menu-item index="2">评论({{count}})</el-menu-item>
     </el-menu>
-    <SongSheetList v-show="activeIndex == '1'" />
-    <SongSheetComment v-show="activeIndex == '2'" />
+    <SongSheetList :trackIds="songSheetData.trackIds" @sendSongDetail="receiveSongDetail" v-show="activeIndex == '1'" />
+    <SongSheetComment @sendCount="receiveCount" v-show="activeIndex == '2'" />
   </div>
 </template>
 
 <script>
+import { mapGetters, mapMutations, mapActions } from "vuex"
 import SongSheetList from '@/components/songSheet/SongSheetList.vue'
 import SongSheetComment from '@/components/songSheet/SongSheetComment.vue'
 export default {
@@ -84,7 +85,15 @@ export default {
       //歌单的ID
       id:this.$route.query.id,
       //歌单的信息
-      songSheetData:[]
+      songSheetData:[],
+      //歌曲详情
+      songs:[],
+      //歌曲其他信息
+      privileges:[],
+      //评论数量
+      count:0,
+      //加载状态
+      loading:false
     }
   },
   components:{
@@ -126,20 +135,50 @@ export default {
     handleSelect(index){
       this.activeIndex = index
     },
-    //获取歌手信息
+    ...mapMutations([
+      //加入要播放的音乐ID
+      'pushId',
+      //添加音乐到播放列表
+      'addMusicList',
+    ]),
+    //获取歌单信息
     getSongSheetData(){
+      this.loading = true
       let params = {
         id:this.id
       }
       this.$http.get('playlist/detail',{params})
       .then(res =>{
         this.songSheetData = res.data.playlist
+        this.loading = false
         //console.log(res)
       })
       .catch(err => {
         console.log(err)
         this.$message.error('歌单详情请求失败,请重试')
       })
+    },
+    //评论数量
+    receiveCount(count){
+      this.count = count
+    },
+    //接收子组件的歌曲详情
+    receiveSongDetail(data){
+      this.songs = data.songs
+      this.privileges = data.privileges
+      //console.log(this.songs)
+    },
+    //歌单所有歌曲加入播放列表
+    playAll(){
+      //开始播放歌单第一首
+      this.pushId(this.songs[0].id)
+      //其他歌曲全部加入播放列表
+      for(let i = 0; i < this.songs.length; i++){
+        //判断歌曲是否可以播放
+        if(this.privileges[i].st != -200){
+          this.addMusicList(this.songs[i])
+        }
+      }
     }
   },
 }
@@ -248,5 +287,13 @@ export default {
   text-overflow: ellipsis;
   overflow: hidden;
   word-break: break-all;
+}
+/* 滚动条样式 */
+.song-sheet-details::-webkit-scrollbar {
+  width: 10px;
+}
+.song-sheet-details::-webkit-scrollbar-thumb {
+  background-color: #bfbfbf;
+  border-radius: 10px;
 }
 </style>
