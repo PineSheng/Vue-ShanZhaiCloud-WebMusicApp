@@ -1,19 +1,20 @@
-# ShanZhaiMusic
+# ShanZhaiMusic项目使用
 
-## Project setup
+## 下载项目依赖
 ```
 npm install
 ```
 
-### Compiles and hot-reloads for development
+### 运行项目
 ```
 npm run serve
 ```
 
-### Compiles and minifies for production
+### 打包项目
 ```
 npm run build
 ```
 
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+# 项目说明
+
+
