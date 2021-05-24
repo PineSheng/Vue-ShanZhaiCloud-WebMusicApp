@@ -66,12 +66,14 @@
             <img :src="randomPlayImg" alt="" @mouseover="randomPlayOver" @mouseleave="randomPlayLeave">
            </el-tooltip>
           </div>
-          <img :src="lastSongImg" alt="" @mouseover="lastSongOver" @mouseleave="lastSongLeave">
-          <div class="song-play" :style="songPlay" @mouseover="songPlayOver" @mouseleave="songPlayLeave" @click="playState ? pauseMusic() : playMusic()">
+          <!-- 上一曲 -->
+          <img :src="lastSongImg" alt="" @mouseover="lastSongOver" @mouseleave="lastSongLeave" @click="lastSong">
+          <div class="song-play"  @click="playState ? pauseMusic() : playMusic()">
             <img v-show="playState == false" src="@/assets/img/play.svg" alt="">
             <img v-show="playState" src="@/assets/img/suspend.svg" alt="">
           </div>
-          <img :src="nextSongImg" alt="" @mouseover="nextSongOver" @mouseleave="nextSongLeave">
+          <!-- 下一曲 -->
+          <img :src="nextSongImg" alt="" @mouseover="nextSongOver" @mouseleave="nextSongLeave" @click="nextSong">
           <span :style="lyric" @mouseover="lyricSpanOver" @mouseleave="lyricSpanLeave">词</span>
         </div>
       </div>
@@ -172,10 +174,15 @@ export default {
       'songHistoryList',
        //播放模式
        'playMode'
-    ]),  
-  },
-  mounted(){
-    //console.log(this.$testingMusic())
+    ]),
+    //生成随机数
+    getRandom() {
+      return (start, end, fixed=0) =>{
+        let differ = end - start
+        let random = Math.random()
+        return (start + differ * random).toFixed(fixed)
+      }
+    }
   },
   methods:{
     ...mapMutations([
@@ -233,12 +240,6 @@ export default {
     },
     lyricSpanLeave(){
       this.lyric = ''
-    },
-    songPlayOver(){
-      this.songPlay = 'background-color: red;'
-    },
-    songPlayLeave(){
-      this.songPlay = ''
     },
     //验证音乐是否可用
     // testingMusic(){
@@ -325,6 +326,30 @@ export default {
       const music = this.$refs.player; //音频所在对象
       music.pause()
       this.suspendMusic()
+    },
+    //上一曲
+    lastSong(){
+      //正在播放歌曲的下标
+      let newSong = this.palySongList.findIndex(item => item.id === this.playSongId)
+      if(newSong  == 0 &&this.playMode != 'randomPlay' && this.palySongList.length > 1){ //如果是第一首
+        this.pushId(this.palySongList[this.palySongList.length - 1].id)
+      }else if(this.palySongList.length == 1){
+        this.$message.error('已经是列表最后一首')
+      }else if(this.playMode != 'randomPlay'){
+        this.pushId(this.palySongList[newSong - 1].id)
+      }
+    },
+    //下一曲
+    nextSong(){
+      //正在播放歌曲的下标
+      let newSong = this.palySongList.findIndex(item => item.id === this.playSongId)
+      if(newSong + 1 == this.palySongList.length &&this.playMode != 'randomPlay' && this.palySongList.length > 1){ //如果是最后一首
+        this.pushId(this.palySongList[0].id)
+      }else if(this.palySongList.length == 1){
+        this.$message.error('已经是列表最后一首')
+      }else if(this.playMode != 'randomPlay'){
+        this.pushId(this.palySongList[newSong + 1].id)
+      }
     },
     //音乐播放时处理
     playingMusic(){
@@ -438,7 +463,7 @@ export default {
 }
 .song-play{
   cursor: pointer;
-  background: rgb(228, 226, 226);
+  background: #f2f2f2;
   border-radius: 100%;
   height: 40px;
   width: 40px;
@@ -446,6 +471,9 @@ export default {
   display: flex;
   align-items: center;
   justify-content: center;
+}
+.song-play:hover{
+  background: rgb(228, 226, 226);
 }
 .song-icon img{
   width: 18px; 

@@ -43,7 +43,12 @@
       </el-menu>
     </div>
     <AlbumSongList :albumData="albumData" v-show="activeIndex == '1'" />
-    <AlbumComment @sendCount="receiveCount" v-show="activeIndex == '2'" />
+    <Comment 
+    :comments="comments"
+    :count="count"
+    :currentPage="currentPage"
+    @handleCurrentChange="handleCurrentChange"
+    v-show="activeIndex == '2'" />
     <AlbumDetails :description="albumData.album.description" v-show="activeIndex == '3'" />
   </div>
 </template>
@@ -51,7 +56,7 @@
 <script>
 import { mapGetters, mapMutations, mapActions } from "vuex"
 import AlbumSongList from '@/components/albumPage/AlbumSongList.vue'
-import AlbumComment from '@/components/albumPage/AlbumComment.vue'
+import Comment from '@/components/comment/Comment.vue'
 import AlbumDetails from '@/components/albumPage/AlbumDetails.vue'
 export default {
   name:'AlbumPage',
@@ -66,12 +71,17 @@ export default {
       albumId:this.$route.query.albumId,
       //评论数量
       count:0,
+      //评论最新页
+      currentPage: 1,
+      //评论
+      comments:{},
+      //加载状态  
       loading:false,
     }
   },
   components:{
     AlbumSongList,
-    AlbumComment,
+    Comment,
     AlbumDetails
   },
   computed:{
@@ -92,6 +102,7 @@ export default {
   created(){
     this.getAlbumData()
     this.getAlbumDynamicData()
+    this.getAlbumCommentData()
   },
   methods:{
     ...mapMutations([
@@ -138,6 +149,30 @@ export default {
         this.$message.error('专辑动态信息请求失败,请重试')
       })
     },
+    //获取专辑评论
+    getAlbumCommentData(){
+      let params = {
+        id:this.albumId,
+        limit:20,
+        offset:this.offset,
+        before:this.time
+      }
+      this.$http.get('comment/album',{params})
+      .then(res =>{
+        //console.log(res)
+        this.comments = res.data
+        this.count = res.data.total
+        if(this.comments.length > 0){
+          this.time = this.comments[this.comments.length - 1].time
+        }
+      })
+    },
+    //评论页码改变事件
+    handleCurrentChange(page){
+      this.currentPage = page;
+      this.offset = (page - 1) * 20
+      this.getAlbumCommentData()
+    }, 
     //播放全部按钮
     playAll(){
       this.pushId(this.albumData.songs[0].id)

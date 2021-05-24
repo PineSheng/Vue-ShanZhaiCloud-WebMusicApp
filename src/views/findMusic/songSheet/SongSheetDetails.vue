@@ -68,14 +68,20 @@
         <el-menu-item index="2">评论({{count}})</el-menu-item>
     </el-menu>
     <SongSheetList :trackIds="songSheetData.trackIds" @sendSongDetail="receiveSongDetail" v-show="activeIndex == '1'" />
-    <SongSheetComment @sendCount="receiveCount" v-show="activeIndex == '2'" />
+    <Comment 
+    :comments="comments"
+    :count="count"
+    :currentPage="currentPage"
+    @handleCurrentChange="handleCurrentChange"
+    v-show="activeIndex == '2'"
+    />
   </div>
 </template>
 
 <script>
 import { mapGetters, mapMutations, mapActions } from "vuex"
+import Comment from '@/components/comment/Comment.vue'
 import SongSheetList from '@/components/songSheet/SongSheetList.vue'
-import SongSheetComment from '@/components/songSheet/SongSheetComment.vue'
 export default {
   name:'SongSheetDetails',
   data() {
@@ -92,13 +98,17 @@ export default {
       privileges:[],
       //评论数量
       count:0,
+      //评论最新页
+      currentPage: 1,
+      //评论
+      comments:{},   
       //加载状态
-      loading:false
+      loading:false,
     }
   },
   components:{
     SongSheetList,
-    SongSheetComment
+    Comment
   },
   computed:{
     //时间戳转时间
@@ -130,6 +140,7 @@ export default {
   },
   created(){
     this.getSongSheetData()
+    this.getSongSheetCommentData()
   },
   methods: {
     handleSelect(index){
@@ -158,10 +169,34 @@ export default {
         this.$message.error('歌单详情请求失败,请重试')
       })
     },
-    //评论数量
-    receiveCount(count){
-      this.count = count
+    //获取歌单评论
+    getSongSheetCommentData(){
+      let params = {
+        id:this.id,
+        limit:20,
+        offset:this.offset,
+        before:this.time
+      }
+      this.$http.get('comment/playlist',{params})
+      .then(res =>{
+        //console.log(res)
+        this.comments = res.data
+        this.count = res.data.total
+        if(this.comments.length > 0){
+          this.time = this.comments[this.comments.length - 1].time
+        }
+      })
+      .catch(err => {
+        console.log(err)
+        this.$message.error('歌单评论请求失败,请重试')
+      })
     },
+    //页码改变事件
+    handleCurrentChange(page){
+      this.currentPage = page;
+      this.offset = (page - 1) * 20
+      this.getSongSheetCommentData()
+    },    
     //接收子组件的歌曲详情
     receiveSongDetail(data){
       this.songs = data.songs

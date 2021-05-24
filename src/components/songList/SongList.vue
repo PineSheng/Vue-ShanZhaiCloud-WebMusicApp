@@ -146,22 +146,27 @@ export default {
         //当列表只剩最后一首且正在播放
         this.$message.error('已经是列表最后一首')
         this.delectMusicList(index)
+        this.$message.success('删除成功')
         this.pushId(' ')
       }else if(index == 0 && this.palySongList.length == 1 ){
         //列表数量大于一首
         this.$message.error('已经是列表最后一首')
         this.delectMusicList(index)
+        this.$message.success('删除成功')
         this.pushId(' ')
       }else if(newSong == index && index + 1 != this.palySongList.length ){
         this.pushId(this.palySongList[index + 1].id)
         this.delectMusicList(index)
+        this.$message.success('删除成功')
       }
       //列表循环模式处理
-      else if(this.playMode == 'listLoop' && index + 1 == this.palySongList.length){
+      else if(this.playMode == 'listLoop' && index + 1 == this.palySongList.length && newSong == index){
         this.pushId(this.palySongList[0].id)
         this.delectMusicList(index)
+        this.$message.success('删除成功')
       }else{
         this.delectMusicList(index)
+        this.$message.success('删除成功')
       }
       //this.delectMusicList(index)
     },

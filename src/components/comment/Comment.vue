@@ -15,9 +15,10 @@
     <div style="font-weight: 600;">
       <p>精彩评论</p>
     </div>
-    <div v-for="(item,index) in hotComments" :key="index">
+    <div v-for="(item,index) in comments.hotComments" :key="index">
+      <!-- {{item.beReplied}} -->
       <div class="comments">
-        <img :src="item.user.avatarUrl" alt="">
+        <img :src="item.user.avatarUrl"/>
         <div style="margin-top:5px;margin-left:10px">
           <span style="color: rgb(77, 153, 222);cursor: pointer;">{{item.user.nickname}}:</span>
           <span>{{item.content}}</span>
@@ -40,9 +41,9 @@
     <div style="font-weight: 600;">
       <p>最新评论</p>
     </div>
-    <div v-for="(item,index) in comments" :key="index + '-only'">
+    <div v-for="(item,index) in comments.comments" :key="index + '-only'">
       <div class="comments">
-        <img :src="item.user.avatarUrl" alt="">
+        <img :src="item.user.avatarUrl" />
         <div style="margin-top:5px;margin-left:10px">
           <span style="color: rgb(77, 153, 222);cursor: pointer;">{{item.user.nickname}}:</span>
           <span>{{item.content}}</span>
@@ -61,42 +62,26 @@
         <img src="@/assets/img/comment.svg">
       </div>
     </div>
-    <div class="block">
-      <el-pagination
-      background
-      layout="prev, pager, next"
-      :total="count"
-      :page-size="20"
-      :current-page="currentPage"
-      @current-change="handleCurrentChange">
-      </el-pagination>
-    </div>
+    <Pagination 
+    :pageSize="20"
+    :count="count"
+    :currentPage="currentPage"
+    @handleCurrentChange="handleCurrentChange"
+    />    
   </div>
 </template>
 
 <script>
+import Pagination from '@/components/pagination/Pagination.vue'
 export default {
-  name:'AlbumComment',
+  name:'comment',
   data() {
     return {
       textarea:'',
-      //参数
-      albumId:this.$route.query.albumId,
-      //热门评论
-      hotComments:[],
-      //最新评论
-      comments:[],
-      //初始页
-      currentPage:1,
-      //数据条数
-      count:0,
-      //数据请求偏移数量
-      offset:0,
-      time:0,
     }
   },
-  created(){
-    this.getAlbumCommentData()
+  components:{
+    Pagination
   },
   computed:{
     //时间戳转时间
@@ -113,46 +98,21 @@ export default {
       }
     }
   },
-  methods: {
-    //获取专辑评论
-    getAlbumCommentData(){
-      let params = {
-        id:this.albumId,
-        limit:15,
-        offset:this.offset,
-      }
-      this.$http.get('comment/album',{params})
-      .then(res =>{
-        //console.log(res)
-        this.hotComments = res.data.hotComments
-        this.comments = res.data.comments
-        this.count = res.data.total
-        this.time = this.comments[14].time
-        this.$emit('sendCount',this.count)
-      })
-    },
-    //获取分页评论
-    getAlbumPagingData(){
-      let params = {
-        id:this.albumId,
-        limit:20,
-        offset:this.offset,
-        time:this.time
-      }
-      this.$http.get('comment/album',{params})
-      .then(res =>{
-        //console.log(res)
-        this.comments = res.data.comments
-      })
-    },
-    //页码改变事件
-    handleCurrentChange(currentPage){
-      this.currentPage = currentPage;
-      this.offset = (currentPage - 1) * 20
-      this.getAlbumPagingData()
-      //console.log(this.currentPage)  //点击第几页
-    },
+  props:{
+    //评论
+    comments:Object,
+    //初始页
+    currentPage:Number,
+    //评论数量
+    count:Number,
   },
+  methods:{
+    //页码改变事件
+    handleCurrentChange(page){
+      this.$emit("handleCurrentChange", page)
+      //console.log(page)
+    },    
+  }  
 }
 </script>
 
