@@ -35,7 +35,7 @@ npm run build
 ### :point_right:项目依赖
 
 - Vue 全家桶 Vue-cli构建
-- webpack 5.31.2
+- webpack 4.46.4
 - ES6
 - axios
 - Element-ui
