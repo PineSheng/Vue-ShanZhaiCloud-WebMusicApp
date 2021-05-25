@@ -31,7 +31,6 @@
       mode="horizontal" 
       @select="handleSelect"
       text-color="#909399"
-      active-text-color="#ec4141"
       >
         <el-menu-item index="1">专辑</el-menu-item>
         <el-menu-item index="2">MV</el-menu-item>

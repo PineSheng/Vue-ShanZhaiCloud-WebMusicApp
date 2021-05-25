@@ -6,7 +6,7 @@
         <Bar-Item>
           <p slot="item-title">推荐</p>
         </Bar-Item>
-        <BarItemContent link="/findMusic/recommend">
+        <BarItemContent link="/findMusic">
           <img slot="item-img" src="./assets/img/music.svg" alt="">
           <span slot="item-span">发现音乐</span>
         </BarItemContent>

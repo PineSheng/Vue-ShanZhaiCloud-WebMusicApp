@@ -8,7 +8,6 @@
       mode="horizontal" 
       @select="handleSelect"
       text-color="#909399"
-      active-text-color="#ec4141"
       :router="true"
       >
         <el-menu-item index="/findMusic/recommend">个性推荐</el-menu-item>

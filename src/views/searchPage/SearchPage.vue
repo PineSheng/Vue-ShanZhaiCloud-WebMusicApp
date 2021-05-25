@@ -8,7 +8,6 @@
       mode="horizontal" 
       @select="handleSelect"
       text-color="#909399"
-      active-text-color="#ec4141"
       >
         <el-menu-item index="/searchPage/searchBySong">单曲</el-menu-item>
         <el-menu-item index="/searchPage/searchBySinger">歌手</el-menu-item>

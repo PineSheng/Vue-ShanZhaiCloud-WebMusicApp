@@ -1,18 +1,18 @@
 <template>
   <div class="song-sheet-view" v-loading="loading" element-loading-text="正在加载">
     <div class="tag">
-      <div class="tag-choose" @click="allTags = !allTags">
+      <div class="tag-choose" @click="allTagsAct = !allTagsAct">
         {{cat}} >
       </div>
       <div class="hot-tags">
         <span 
-        v-for="(item,index) in tags" :key="index" 
+        v-for="(item,index) in hotTags" :key="index" 
         @click="cat = item.playlistTag.name"
         :class="{actHotTag : cat == item.playlistTag.name}"
         >{{item.playlistTag.name}}</span>
       </div>
     </div>
-    <SongSheetTag v-show="allTags"/>
+    <SongSheetTag :allTags="allTags" :tagKind="cat" @selectTag="selectTag" v-show="allTagsAct"/>
     <div class="song-sheet-box">
       <div class="song-sheet" v-for="(item,index) in songSheetData" :key="index" @click="seeDetails(item)">
         <div class="cover-img">
@@ -20,6 +20,8 @@
             :src="item.coverImgUrl"
             fit="fill"
             style="width:100%;border-radius: 10px;"
+            @mouseover="currentIndex = index"
+            @mouseleave="currentIndex = '-1'"
           ></el-image>
           <div class="play-count">
             <i class="el-icon-headset"></i>
@@ -34,6 +36,10 @@
               fit="fill"
               style="width: 18px;margin-left:10px;margin-top:5px"
             ></el-image>
+            <div               
+            :class="{playIcon:currentIndex == index,playNone:currentIndex != index}">
+              <img src="@/assets/img/play2.svg" style="wdith:35px;height:35px"/>
+            </div>
           </div>
         </div>
         <div class="introduce">
@@ -60,12 +66,19 @@ export default {
   name:'SongSheet',
   data() {
     return {
-      //歌单分类标签
-      tags:[],
+      //热门歌单分类标签
+      hotTags:[],
+      //所有歌单分类标签
+      allTags:{
+        //标签类型
+        categories: {},
+        //对应类型的标签
+        sub: [[], [], [], [], []],
+      },
       //所有歌单分类标签是否打开
-      allTags:false,
+      allTagsAct:false,
       //歌单请求分类参数
-      cat:'全部',
+      cat:'全部歌单',
       //歌单数据
       songSheetData:[],
       //初始页
@@ -74,6 +87,8 @@ export default {
       songSheetCount:0,
       //数据请求偏移数量
       offset:0,
+      //播放图标活跃标识
+      currentIndex:'-1',
       //是否正在加载
       loading:false,
     }
@@ -83,12 +98,13 @@ export default {
   },
   watch:{
     cat(){
-      this.getSongSheetData()
+      this.getSongSheetData(this.cat)
     }
   },
   created(){
-    this.getSongSheetData()
-    this.getTagsData()
+    this.getSongSheetData(this.cat)
+    this.getHotTagsData()
+    this.getAllTagsData()
   },
   computed:{
     //播放数量转换
@@ -107,12 +123,12 @@ export default {
   },
   methods:{
     //获取歌单数据
-    getSongSheetData(){
+    getSongSheetData(cat){
       this.loading = true
       let params = {
         limit:50,
         offset:this.offset,
-        cat:this.cat
+        cat:cat
       }
       this.$http.get('top/playlist',{params:params})
       .then(res =>{
@@ -126,16 +142,47 @@ export default {
         this.$message.error('歌单请求失败')
       })
     },
-    //获取歌单分类
-    getTagsData(){
+    //获取热门歌单分类
+    getHotTagsData(){
       this.$http.get('playlist/hot')
       .then(res =>{
-        this.tags = res.data.tags
+        this.hotTags = res.data.tags
       })
       .catch(err => {
         console.log(err)
-        this.$message.error('歌单分类请求失败')
+        this.$message.error('热门歌单分类请求失败')
       })
+    },
+    //获取所有歌单分类
+    getAllTagsData(){
+      this.$http.get('playlist/catlist')
+      .then(res =>{
+        this.allTags.categories = res.data.categories;
+        for (let tag of res.data.sub) {
+          switch (tag.category) {
+            case 0:
+              this.allTags.sub[0].push(tag);
+              break;
+            case 1:
+              this.allTags.sub[1].push(tag);
+              break;
+            case 2:
+              this.allTags.sub[2].push(tag);
+              break;
+            case 3:
+              this.allTags.sub[3].push(tag);
+              break;
+            case 4:
+              this.allTags.sub[4].push(tag);
+              break;
+          }
+        }
+      })
+    },
+    //选中Tag
+    selectTag(tag){
+      this.allTagsAct = false
+      this.cat = tag
     },
     //查看歌单详情
     seeDetails(item){
@@ -160,6 +207,7 @@ export default {
 
 <style scoped>
 .song-sheet-view{
+  position: relative;
   height:calc(100% - 100px);
   width: 100%;
   overflow-y: auto;
@@ -225,12 +273,34 @@ export default {
   right: 3%;
   color: white;
 }
+.playIcon{
+  position: absolute;
+  right:2%;
+  bottom:10%;
+  z-index:10;
+  animation-name: play;
+  animation-duration: 0.8s;
+  animation-iteration-count: 1;
+  animation-fill-mode: forwards;
+}
+
+@keyframes play {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+.playNone{
+  display: none;
+}
 .publisher{
   display: flex;
   position: absolute;
   align-items: center;
   width: 90%;
-  bottom: 5%;
+  bottom: 2%;
   left: 3%;
   color: white;
 }

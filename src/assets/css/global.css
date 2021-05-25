@@ -64,3 +64,14 @@ body {
   background-color: #ec4141;
   color: #FFF;
 }
+
+/* 导航菜单样式 */
+.el-menu-item.is-active{
+  border-color: #ec4141;
+  font-size: 20px;
+  font-weight: 400;
+}
+.el-menu--horizontal>.el-menu-item.is-active{
+  border-bottom: 2px solid #ec4141;
+  color: #303133;
+}

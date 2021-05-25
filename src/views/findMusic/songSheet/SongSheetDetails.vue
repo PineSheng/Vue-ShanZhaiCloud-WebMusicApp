@@ -110,6 +110,16 @@ export default {
     SongSheetList,
     Comment
   },
+  watch: {
+   //监听路由参数
+   $route(){
+    this.id = this.$route.query.id
+   },
+   id() {
+     this.getSongSheetData()
+     this.getSongSheetCommentData()
+   },
+  },
   computed:{
     //时间戳转时间
     formatDate() {

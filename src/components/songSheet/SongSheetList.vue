@@ -12,7 +12,7 @@
         <img class="mv-icon" src="@/assets/img/MV.svg" v-show="item.mv != 0"/>
         <img class="vip-icon" src="@/assets/img/VIP.svg" v-show="songsDetail.privileges[index].chargeInfoList[0].chargeType !== 0" />
         <img class="love-icon" style="height: 20px;width:20px" src="@/assets/img/love.svg" title="喜欢" v-show="index === currentIndex">
-        <img class="add-icon" style="height: 20px;width:20px" src="@/assets/img/add.svg" title="添加到播放列表"  v-show="index === currentIndex" @click="addMusicList(item)">
+        <img class="add-icon" style="height: 20px;width:20px" src="@/assets/img/add.svg" title="添加到播放列表"  v-show="index === currentIndex" @click="increase(index,item)">
         <img class="share-icon" style="height: 20px;width:20px" src="@/assets/img/share.svg" title="分享"  v-show="index === currentIndex">
         <!-- 音乐名字 -->
         <span class="table-music-name" :class="{noSongName: songsDetail.privileges[index].st == -200}"  :title="item.name">{{item.name}}</span>
@@ -85,6 +85,10 @@ export default {
     //双击歌曲列表播放音乐
     tableDbclick(index,item){
       this.songsDetail.privileges[index].st == -200 ? this.$message.error('因版权问题，该歌曲已下架') : this.pushId(item.id)
+    },
+    //添加音乐到播放列表
+    increase(index,item){
+      this.songsDetail.privileges[index].st == -200 ? this.$message.error('因版权问题，该歌曲已下架') : this.addMusicList(item)
     }
   },
 }

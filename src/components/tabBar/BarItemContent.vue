@@ -20,7 +20,7 @@ export default {
   },
   computed:{
     isActive(){
-       return this.$route.path.indexOf(this.link) !== -1
+      return this.$route.path.indexOf(this.link) !== -1
     }
   },
   methods:{

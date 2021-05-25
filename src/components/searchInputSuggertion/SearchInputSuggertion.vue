@@ -29,7 +29,7 @@
         <img src="@/assets/img/album.svg" style="width: 15px;height:15px" alt="">
         <span style="margin-left:5px">专辑</span>
       </div>
-      <div class="content-name" v-for="(item,index) in searchContentData.albums" :key="index">
+      <div class="content-name" v-for="(item,index) in searchContentData.albums" :key="index" @click="searchAlbumClick(item)">
         <span>{{item.name}}</span>
       </div>
     </div>
@@ -39,7 +39,7 @@
         <img src="@/assets/img/list.svg" style="width: 15px;height:15px" alt="">
         <span style="margin-left:5px">歌单</span>
       </div>
-      <div class="content-name" v-for="(item,index) in searchContentData.playlists" :key="index">
+      <div class="content-name" v-for="(item,index) in searchContentData.playlists" :key="index" @click="searchSongSheetClick(item)">
         <span>{{item.name}}</span>
       </div>
     </div>
@@ -89,9 +89,38 @@ export default {
       this.startPlayMusic()
       this.$emit('closeInputSearch',false)
     },
-    //搜索建议歌曲点击事件
+    //搜索建议歌手点击事件
     searchSingerClick(item){
-      console.log(111)
+      console.log(item)
+      this.$router.push({
+        path: '/ArtistPage',
+        query:{
+          artistId:item.id
+        }
+      })
+      this.$emit('closeInputSearch',false)
+    },
+    //搜索建议专辑点击事件
+    searchAlbumClick(item){
+      this.$router.push({
+        path: '/AlbumPage',
+        query:{
+          albumId:item.id
+        }
+      })
+      this.$emit('closeInputSearch',false)
+    },
+    //搜索建议歌单点击事件
+    searchSongSheetClick(item){
+      if(this.$route.query.id != item.id){
+        this.$router.push({
+          path: '/SongSheetDetails',
+          query:{
+            id:item.id
+          }
+        })
+      this.$emit('closeInputSearch',false)
+      }
     }
   }
 }
