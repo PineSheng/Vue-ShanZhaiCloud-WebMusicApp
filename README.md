@@ -1,6 +1,6 @@
 <h1 align="center">ShanZhaiMusic</h1>
 
-# 项目使用
+## 项目使用
 
 ### 下载项目依赖
 ```
