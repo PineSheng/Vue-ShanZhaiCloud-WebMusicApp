@@ -7,6 +7,7 @@
         :src="songCover"
         fit="fill"
         style="height: 57px;width: 57px;border-radius: 10%;"
+        @click="toSongDetails()"
       ></el-image>
     </div>
     <div class="song-name" v-if="playSongId != ''">
@@ -405,6 +406,9 @@ export default {
       music.muted = !music.muted
       music.muted ? (this.volumeState = false,this.musicVolume = 0) : (this.volumeState = true ,this.musicVolume = music.volume * 100 )
     },
+    toSongDetails(){
+      this.$router.push('/songDetails')
+    }
   }
 }
 </script>
@@ -436,6 +440,12 @@ export default {
   flex-direction: column;
   width: 160px;
   margin-left: 10px;
+}
+.song-name span{
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  word-break: break-all;
 }
 
 /* 中间的播放器 */

@@ -6,10 +6,17 @@
       </div>
     </div>
     <OfficialList :officialListData="officialListData" />
+    <div class="global-list">
+      <div>
+        <h2>全球榜</h2>
+      </div>
+    </div>
+    <GlobalList :globalListData="globalListData" />
   </div>
 </template>
 
 <script>
+import GlobalList from '@/components/findMusic/rankingList/GlobalList.vue'
 import OfficialList from '@/components/findMusic/rankingList/OfficialList.vue'
 export default {
   name:'RankingList',
@@ -19,10 +26,13 @@ export default {
       loading:false,
       //官方榜数据
       officialListData:[],
+      //全球榜数据
+      globalListData:[],
     }
   },
   components:{
-    OfficialList
+    OfficialList,
+    GlobalList
   },
   created(){
     this.getRankingListData()
@@ -33,9 +43,10 @@ export default {
       this.loading = true
       this.$http.get('toplist/detail')
       .then(res =>{
-        console.log(res)
+        //console.log(res)
         this.officialListData = res.data.list.slice(0, 4)
-        console.log(this.officialListData)
+        this.globalListData = res.data.list.slice(4)
+        console.log(this.globalListData)
         this.loading = false
       })
       .catch(err => {

@@ -35,15 +35,18 @@ export default {
     return {
       //歌曲数据
       songsDetail:[],
+      //鼠标移入index
       currentIndex:-1,
+      //加载状态
       loading:false,
+      //歌单id
+      id:this.$route.query.id,
+      //歌单数据
+      songSheetData:{}
     }
   },
-  props:{
-    trackIds:Array
-  },
   created(){
-    this.getSongSheetSongs()
+    this.getSongSheetData()
   },
   methods: {
     ...mapMutations([
@@ -54,17 +57,28 @@ export default {
       //添加音乐到播放列表
       'addMusicList',
     ]),
+    //获取歌单信息
+    getSongSheetData(){
+      let params = {
+        id:this.id
+      }
+      this.$http.get('playlist/detail',{params})
+      .then(res =>{
+        this.songSheetData = res.data.playlist
+        this.getSongSheetSongs()
+      })
+    },
     //获取歌单歌曲
     getSongSheetSongs(){
       this.loading = true
       //歌曲id拼接
       let ids = ''
-      for(let i = 0; i < this.trackIds.length; i++){
+      for(let i = 0; i < this.songSheetData.trackIds.length; i++){
         //console.log(this.trackIds[i].id.toString())
-        if(i + 1 != this.trackIds.length){
-          ids += this.trackIds[i].id.toString() + ','
+        if(i + 1 != this.songSheetData.trackIds.length){
+          ids += this.songSheetData.trackIds[i].id.toString() + ','
         }else{
-          ids += this.trackIds[i].id.toString()
+          ids += this.songSheetData.trackIds[i].id.toString()
         }
       }
       let params = {

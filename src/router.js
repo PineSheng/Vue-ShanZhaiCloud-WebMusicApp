@@ -115,6 +115,12 @@ export default new Router({
       name:'SongSheetDetails',
       path:'/songSheetDetails',
       component: () => import('./views/findMusic/songSheet/SongSheetDetails.vue')
+    },
+    //歌曲详情页
+    {
+      name:'SongDetails',
+      path:'/songDetails',
+      component: () => import('./views/songDetails/SongDetails.vue')      
     }
   ]
 })

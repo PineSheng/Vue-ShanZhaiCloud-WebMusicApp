@@ -1,6 +1,6 @@
 <template>
-  <div class="song-sheet-details" style="height:calc(100% - 20px);" v-loading="loading" element-loading-text="正在加载">
-    <div class="introduce">
+  <div class="song-sheet-details" style="height:calc(100% - 20px);">
+    <div class="introduce" v-if="Object.keys(songSheetData).length > 0">
       <div class="song-sheet-img">
         <el-image
           :src="songSheetData.coverImgUrl"
@@ -62,12 +62,11 @@
       mode="horizontal" 
       @select="handleSelect"
       text-color="#909399"
-      active-text-color="#ec4141"
       >
         <el-menu-item index="1">歌曲列表</el-menu-item>
         <el-menu-item index="2">评论({{count}})</el-menu-item>
     </el-menu>
-    <SongSheetList :trackIds="songSheetData.trackIds" @sendSongDetail="receiveSongDetail" v-show="activeIndex == '1'" />
+    <SongSheetList  @sendSongDetail="receiveSongDetail" v-show="activeIndex == '1'" />
     <Comment 
     :comments="comments"
     :count="count"
@@ -91,7 +90,7 @@ export default {
       //歌单的ID
       id:this.$route.query.id,
       //歌单的信息
-      songSheetData:[],
+      songSheetData:{},
       //歌曲详情
       songs:[],
       //歌曲其他信息
@@ -102,8 +101,6 @@ export default {
       currentPage: 1,
       //评论
       comments:{},   
-      //加载状态
-      loading:false,
     }
   },
   components:{
@@ -164,15 +161,12 @@ export default {
     ]),
     //获取歌单信息
     getSongSheetData(){
-      this.loading = true
       let params = {
         id:this.id
       }
       this.$http.get('playlist/detail',{params})
       .then(res =>{
         this.songSheetData = res.data.playlist
-        this.loading = false
-        //console.log(res)
       })
       .catch(err => {
         console.log(err)

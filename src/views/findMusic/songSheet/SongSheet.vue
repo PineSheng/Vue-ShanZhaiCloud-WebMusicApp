@@ -37,7 +37,7 @@
               style="width: 18px;margin-left:10px;margin-top:5px"
             ></el-image>
             <div               
-            :class="{playIcon:currentIndex == index,playNone:currentIndex != index}">
+            :class="{'play-icon':currentIndex == index,'play-none':currentIndex != index}">
               <img src="@/assets/img/play2.svg" style="wdith:35px;height:35px"/>
             </div>
           </div>
@@ -256,6 +256,12 @@ export default {
   justify-content: space-between;
   width: 100%;
 }
+.song-sheet-box:after{
+  content: "";
+  width: 39%;
+  height: 0px;
+  visibility: hidden;
+}
 .song-sheet{
   margin-top: 30px;
   width: 18%;
@@ -273,11 +279,10 @@ export default {
   right: 3%;
   color: white;
 }
-.playIcon{
+.play-icon{
   position: absolute;
   right:2%;
   bottom:10%;
-  z-index:10;
   animation-name: play;
   animation-duration: 0.8s;
   animation-iteration-count: 1;
@@ -292,7 +297,7 @@ export default {
     opacity: 1;
   }
 }
-.playNone{
+.play-none{
   display: none;
 }
 .publisher{
